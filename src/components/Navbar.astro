@@ -24,7 +24,9 @@ import LanguageSwitcher from './LanguageSwitcher.astro';
       </div>
 
       <div class="flex items-center gap-4">
-        <LanguageSwitcher lang={lang} class="group" />
+        <div class="group">
+          <LanguageSwitcher lang={lang} />
+        </div>
 
         <a
           href="#contacto"
