@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const t = (await import('../../lib/i18n.ts')).useTranslations('en');
+---
+<BaseLayout title={t['hero.title']} lang="en">
+  <main>
+    <h1>{t['hero.title']}</h1>
+    <p>{t['hero.specialty']}</p>
+    <p>{t['hero.license']}</p>
+  </main>
+</BaseLayout>
