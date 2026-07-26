@@ -1,0 +1,106 @@
+---
+interface Props {
+  lang: 'es' | 'en';
+  title: string;
+}
+const { lang, title } = Astro.props;
+
+const timeline = [
+  {
+    year: '2023',
+    title: lang === 'es' ? 'Jefe de Servicio Medicina Interna' : 'Head of Internal Medicine Department',
+    organization: 'Hospital Universitario Central',
+    description: lang === 'es'
+      ? 'Liderazgo del servicio con 15 especialistas. Implementación de protocolos de atención integral y programa de formación MIR.'
+      : 'Leadership of 15-specialist department. Implementation of comprehensive care protocols and MIR training program.',
+    icon: 'hospital'
+  },
+  {
+    year: '2020',
+    title: lang === 'es' ? 'Adjunto Medicina Interna' : 'Internal Medicine Attending',
+    organization: 'Hospital Regional',
+    description: lang === 'es'
+      ? 'Responsable de unidad de hospitalización y consultas externas. Coordinación de comité de infecciones nosocomiales.'
+      : 'Responsible for inpatient unit and outpatient clinics. Nosocomial infections committee coordination.',
+    icon: 'user-md'
+  },
+  {
+    year: '2017',
+    title: lang === 'es' ? 'Fellow Enfermedades Infecciosas' : 'Infectious Diseases Fellowship',
+    organization: 'Instituto de Investigación Biomédica',
+    description: lang === 'es'
+      ? 'Subespecialización en enfermedades infecciosas. Investigación en resistencias antimicrobianas y sepsis.'
+      : 'Subspecialization in infectious diseases. Research on antimicrobial resistance and sepsis.',
+    icon: 'microscope'
+  },
+  {
+    year: '2015',
+    title: lang === 'es' ? 'MIR Medicina Interna' : 'Internal Medicine Residency',
+    organization: 'Hospital Universitario',
+    description: lang === 'es'
+      ? 'Formación como médico interno residente. Rotaciones en urgencias, UCI, cardiología, neumología y enfermedades infecciosas.'
+      : 'Internal medicine residency training. Rotations in ER, ICU, cardiology, pulmonology and infectious diseases.',
+    icon: 'graduation-cap'
+  },
+  {
+    year: '2010',
+    title: lang === 'es' ? 'Licenciatura en Medicina' : 'Medical Degree',
+    organization: 'Universidad de Medicina',
+    description: lang === 'es'
+      ? 'Grado en Medicina y Cirugía con mención honorífica. Trabajo fin de grado en biomarcadores inflamatorios en síndrome coronario agudo.'
+      : 'Medical degree with honors. Thesis on inflammatory biomarkers in acute coronary syndrome.',
+    icon: 'award'
+  },
+];
+
+const icons: Record<string, string> = {
+  hospital: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 22H5a2 2 0 01-2-2v-7"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 22h4a2 2 0 002-2v-5"/></svg>',
+  'user-md': '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>',
+  microscope: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 4h6v6m-6 0a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 16v-4"/></svg>',
+  'graduation-cap': '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>',
+  award: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>',
+};
+---
+
+<!-- Inlined Section component HTML to avoid Astro bundling bug -->
+<section id="trayectoria" class="w-full py-20 sm:py-24 lg:py-32 bg-bg" aria-labelledby="trayectoria-title">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <header class="mb-10 lg:mb-12">
+      <h2 id="trayectoria-title" class="font-display text-3xl sm:text-4xl lg:text-5xl font-medium text-surface">{title}</h2>
+    </header>
+
+    <div class="max-w-3xl mx-auto">
+      <div class="relative">
+        <div class="absolute left-8 top-0 bottom-0 w-0.5 bg-primary/10" aria-hidden="true" />
+        
+        {timeline.map((item, index) => (
+          <div class="relative pl-20 pb-12 last:pb-0" style={{ animationDelay: `${index * 100}ms` }}>
+            <div class="absolute left-4 top-1 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary z-10 border-2 border-surface">
+              {icons[item.icon]}
+            </div>
+            <div class="absolute left-8 top-5 w-0.5 h-10 bg-primary/10" aria-hidden="true" />
+            
+            <div class="bg-surface rounded-xl p-6 border border-primary/10 hover:border-primary/20 transition-colors duration-300">
+              <div class="flex items-center gap-3 mb-3">
+                <span class="font-mono text-lg font-medium text-primary">{item.year}</span>
+                <h3 class="font-display text-lg font-medium text-surface">{item.title}</h3>
+              </div>
+              <p class="text-sm text-primary font-medium mb-2">{item.organization}</p>
+              <p class="text-surface/70 leading-relaxed">{item.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    .animate-fade-in-up {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+</style>

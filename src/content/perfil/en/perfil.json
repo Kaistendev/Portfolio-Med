@@ -1,0 +1,11 @@
+{
+  "name": "Dr. Juan Pérez",
+  "specialty": "Internal Medicine",
+  "license": "License No. 12345",
+  "bio": "Internal Medicine Specialist with over 15 years of experience in the diagnosis and treatment of complex and chronic diseases. I have developed my career in referral hospitals, combining clinical practice with teaching and research. My approach is based on evidence-based medicine, patient-centered care, and multidisciplinary coordination to achieve the best health outcomes.",
+  "photo": "/doctor.jpg",
+  "locale": "en",
+  "cv": "/cv-dr-juan-perez.pdf"
+}
+
+

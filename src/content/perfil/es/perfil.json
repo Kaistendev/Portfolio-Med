@@ -1,0 +1,11 @@
+{
+  "name": "Dr. Juan Pérez",
+  "specialty": "Medicina Interna",
+  "license": "Colegiado Nº 12345",
+  "bio": "Especialista en Medicina Interna con más de 15 años de experiencia en el diagnóstico y tratamiento de enfermedades complejas y crónicas. He desarrollado mi carrera en hospitales de referencia, combinando la práctica clínica con la docencia e investigación. Mi enfoque se basa en la medicina basada en la evidencia, la atención centrada en el paciente y la coordinación multidisciplinar para lograr los mejores resultados en salud.",
+  "photo": "/doctor.jpg",
+  "locale": "es",
+  "cv": "/cv-dr-juan-perez.pdf"
+}
+
+

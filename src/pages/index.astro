@@ -1,140 +1,41 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Section from '../components/Section.astro';
-import Button from '../components/Button.astro';
-import Card from '../components/Card.astro';
-import Badge from '../components/Badge.astro';
+import HeroSection from '../components/HeroSection.astro';
+import ServicesGrid from '../components/ServicesGrid.astro';
+import Timeline from '../components/Timeline.astro';
+import BlogGrid from '../components/BlogGrid.astro';
+import TestimonialsCarousel from '../components/TestimonialsCarousel.astro';
+import ContactSection from '../components/ContactSection.astro';
 import PulseRibbon from '../components/PulseRibbon.astro';
 
 const t = (await import('../lib/i18n.ts')).useTranslations('es');
 ---
+
 <BaseLayout title={t['hero.title']} lang="es" description="Portfolio médico profesional - Servicios, trayectoria y blog médico">
-  <Section className="min-h-[calc(100vh-16rem)] flex items-center justify-center">
-    <div class="text-center max-w-3xl mx-auto px-4">
-      <Badge variant="accent" className="mb-6 inline-block">
-        {t['hero.specialty']}
-      </Badge>
-      <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-medium mb-4 text-surface">
-        {t['hero.title']}
-      </h1>
-      <p class="text-lg md:text-xl text-surface/70 mb-8 max-w-2xl mx-auto">
-        {t['hero.license']}
-      </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-        <Button variant="primary" size="lg" href="#contacto">
-          {t['hero.cta']}
-        </Button>
-        <Button variant="outline" size="lg" href="/servicios">
-          {t['nav.servicios']}
-        </Button>
-      </div>
-    </div>
-  </Section>
+  <HeroSection lang="es" />
+  
+  <PulseRibbon />
+
+  <ServicesGrid 
+    lang="es"
+    title={t['services.title']}
+    viewAllText={t['services.viewAll']}
+    viewAllHref="/servicios"
+  />
 
   <PulseRibbon />
 
-  <Section id="servicios" className="bg-surface">
-    <h2 class="font-display text-3xl md:text-4xl font-medium text-center mb-12 text-surface">
-      {t['services.title']}
-    </h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto px-4">
-      <Card variant="elevated" className="h-full">
-        <div slot="header">
-          <Badge variant="primary" className="mb-3 inline-block">Consulta</Badge>
-          <h3 class="font-display text-xl font-medium text-surface">Medicina Interna</h3>
-        </div>
-        <p slot="content" class="text-surface/70">
-          Diagnóstico y tratamiento integral de enfermedades complejas y crónicas en adultos.
-        </p>
-        <div slot="footer">
-          <Button variant="secondary" size="sm" href="/servicios/medicina-interna">
-            Ver detalles
-          </Button>
-        </div>
-      </Card>
-
-      <Card variant="elevated" className="h-full">
-        <div slot="header">
-          <Badge variant="primary" className="mb-3 inline-block">Prevención</Badge>
-          <h3 class="font-display text-xl font-medium text-surface">Chequeos Ejecutivos</h3>
-        </div>
-        <p slot="content" class="text-surface/70">
-          Programas personalizados de prevención y detección temprana para profesionales.
-        </p>
-        <div slot="footer">
-          <Button variant="secondary" size="sm" href="/servicios/chequeos">
-            Ver detalles
-          </Button>
-        </div>
-      </Card>
-
-      <Card variant="elevated" className="h-full">
-        <div slot="header">
-          <Badge variant="accent" className="mb-3 inline-block">Seguimiento</Badge>
-          <h3 class="font-display text-xl font-medium text-surface">Enfermedades Crónicas</h3>
-        </div>
-        <p slot="content" class="text-surface/70">
-          Manejo integral de diabetes, hipertensión, dislipemia y enfermedades cardiovasculares.
-        </p>
-        <div slot="footer">
-          <Button variant="secondary" size="sm" href="/servicios/cronicas">
-            Ver detalles
-          </Button>
-        </div>
-      </Card>
-    </div>
-    <div class="text-center mt-10">
-      <Button variant="outline" size="lg" href="/servicios">
-        {t['services.viewAll']}
-      </Button>
-    </div>
-  </Section>
+  <Timeline lang="es" title={t['timeline.title']} />
 
   <PulseRibbon />
 
-  <Section id="trayectoria" className="bg-bg">
-    <h2 class="font-display text-3xl md:text-4xl font-medium text-center mb-12 text-surface">
-      {t['timeline.title']}
-    </h2>
-    <div class="max-w-3xl mx-auto px-4">
-      <Card variant="outlined" className="mb-6">
-        <div slot="header" class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-mono text-lg font-medium">2020</div>
-          <div>
-            <h3 class="font-display text-lg font-medium text-surface">Jefe de Servicio Medicina Interna</h3>
-            <p class="text-sm text-surface/60">Hospital Universitario Central</p>
-          </div>
-        </div>
-        <p slot="content" class="text-surface/70">
-          Liderazgo del servicio de medicina interna con equipo de 15 especialistas. Implementación de protocolos de atención integral y programa de formación de residentes.
-        </p>
-      </Card>
+  <BlogGrid lang="es" />
 
-      <Card variant="outlined" className="mb-6">
-        <div slot="header" class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-mono text-lg font-medium">2015</div>
-          <div>
-            <h3 class="font-display text-lg font-medium text-surface">Especialista en Medicina Interna</h3>
-            <p class="text-sm text-surface/60">Colegio Oficial de Médicos</p>
-          </div>
-        </div>
-        <p slot="content" class="text-surface/70">
-          Obtención del título de especialista vía MIR. Rotaciones en urgencias, UCI, cardiología, neumología y enfermedades infecciosas.
-        </p>
-      </Card>
+  <PulseRibbon />
 
-      <Card variant="outlined">
-        <div slot="header" class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-mono text-lg font-medium">2010</div>
-          <div>
-            <h3 class="font-display text-lg font-medium text-surface">Licenciatura en Medicina</h3>
-            <p class="text-sm text-surface/60">Universidad de Medicina</p>
-          </div>
-        </div>
-        <p slot="content" class="text-surface/70">
-          Grado en Medicina y Cirugía con mención honorífica. Trabajo de fin de grado en biomarcadores inflamatorios en síndrome coronario agudo.
-        </p>
-      </Card>
-    </div>
-  </Section>
+  <TestimonialsCarousel lang="es" />
+
+  <PulseRibbon />
+
+  <ContactSection lang="es" />
 </BaseLayout>

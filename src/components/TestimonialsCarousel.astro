@@ -1,0 +1,244 @@
+---
+import Section from './Section.astro';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+const { lang } = Astro.props;
+const t = (await import('../lib/i18n.ts')).useTranslations(lang);
+
+const testimonials = [
+  {
+    name: 'María González',
+    rating: 5,
+    text: lang === 'es'
+      ? 'El Dr. Pérez me diagnosticó una enfermedad autoinmune que llevaba años sin identificar. Su dedicación y explicación detallada me dieron tranquilidad. El tratamiento ha cambiado mi vida completamente.'
+      : 'Dr. Pérez diagnosed an autoimmune disease that had gone unidentified for years. His dedication and detailed explanation gave me peace of mind. The treatment has completely changed my life.',
+    avatar: 'MG',
+    date: '2024-01-15'
+  },
+  {
+    name: 'Carlos Rodríguez',
+    rating: 5,
+    text: lang === 'es'
+      ? 'Excelente profesional. Me realizó un chequeo ejecutivo muy completo, detectó factores de riesgo que otros habían pasado por alto. Muy recomendado para prevención.'
+      : 'Excellent professional. Performed a very comprehensive executive checkup, detected risk factors others had missed. Highly recommended for prevention.',
+    avatar: 'CR',
+    date: '2023-11-20'
+  },
+  {
+    name: 'Ana Martínez',
+    rating: 5,
+    text: lang === 'es'
+      ? 'Llevo años tratándome la diabetes y hipertensión con el Dr. Pérez. Su seguimiento es cercano, ajusta la medicación cuando hace falta y siempre tiene tiempo para resolver dudas.'
+      : 'Have been treating my diabetes and hypertension with Dr. Pérez for years. His follow-up is close, adjusts medication when needed, and always has time to answer questions.',
+    avatar: 'AM',
+    date: '2023-09-08'
+  },
+  {
+    name: 'Javier López',
+    rating: 5,
+    text: lang === 'es'
+      ? 'Mi padre mayor tenía múltiples patologías y el Dr. Pérez coordinó toda su atención con otros especialistas. Gran humanidad y profesionalidad. La familia está muy agradecida.'
+      : 'My elderly father had multiple conditions and Dr. Pérez coordinated all his care with other specialists. Great humanity and professionalism. The family is very grateful.',
+    avatar: 'JL',
+    date: '2023-06-12'
+  },
+  {
+    name: 'Laura Fernández',
+    rating: 5,
+    text: lang === 'es'
+      ? 'Me operaron de urgencia y el Dr. Pérez fue quien me visitó en planta. Increíble trato humano, me explicó todo con paciencia. Un médico de los de antes, que escucha de verdad.'
+      : 'Had emergency surgery and Dr. Pérez visited me on the ward. Incredible human touch, explained everything with patience. A doctor of the old school who truly listens.',
+    avatar: 'LF',
+    date: '2023-03-25'
+  },
+  {
+    name: 'Roberto Silva',
+    rating: 5,
+    text: lang === 'es'
+      ? 'Acudí por segunda opinión sobre un tratamiento complejo. El Dr. Pérez revisó todo mi historial, propuso una alternativa mejor y coordinó con mi cardiólogo. Muy riguroso.'
+      : 'Sought second opinion on complex treatment. Dr. Pérez reviewed my full history, proposed a better alternative, and coordinated with my cardiologist. Very rigorous.',
+    avatar: 'RS',
+    date: '2022-12-03'
+  },
+];
+---
+
+<Section id="testimonios" className="bg-surface" padding="xl">
+  <div slot="header" class="text-center">
+    <h2 class="font-display text-3xl md:text-4xl font-medium text-surface">{t['testimonials.title']}</h2>
+  </div>
+
+  <div class="max-w-5xl mx-auto px-4">
+    <div id="testimonials-carousel" class="relative" data-autoplay="5000" role="region" aria-label={lang === 'es' ? 'Carrusel de testimonios' : 'Testimonials carousel'}>
+      <div class="overflow-hidden">
+        <div id="testimonials-track" class="flex transition-transform duration-500 ease-out" style="transform: translateX(0%);">
+          {testimonials.map((testimonial, i) => (
+            <div class="w-full flex-shrink-0 px-4" style={{ width: '100%' }} role="group" aria-roledescription="slide" aria-label={`${lang === 'es' ? 'Testimonio' : 'Testimonial'} ${i + 1} ${lang === 'es' ? 'de' : 'of'} ${testimonials.length}`}>
+              <article class="bg-surface rounded-2xl border border-primary/10 p-8 md:p-10 h-full flex flex-col">
+                <div class="flex items-center gap-4 mb-6">
+                  <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary font-display text-xl font-medium flex-shrink-0">
+                    {testimonial.avatar}
+                  </div>
+                  <div>
+                    <h3 class="font-display text-lg font-medium text-surface">{testimonial.name}</h3>
+                    <time class="text-sm text-surface/50" dateTime={testimonial.date}>
+                      {new Date(testimonial.date).toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </time>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1 mb-6" aria-label={`${testimonial.rating} ${lang === 'es' ? 'estrellas' : 'stars'}`}>
+                  {Array.from({ length: 5 }, (_, i) => (
+                    <svg key={i} class={`w-5 h-5 ${i < testimonial.rating ? 'text-accent fill-current' : 'text-primary/20'}`} fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  ))}
+                </div>
+                <blockquote class="text-surface/70 leading-relaxed flex-1">
+                  &ldquo;{testimonial.text}&rdquo;
+                </blockquote>
+              </article>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="absolute inset-y-0 left-0 right-0 pointer-events-none hidden lg:block">
+        <button
+          id="prev-btn"
+          type="button"
+          class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 w-12 h-12 rounded-full bg-primary/10 border border-primary/20 text-primary flex items-center justify-center hover:bg-primary hover:text-surface transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-surface pointer-events-auto"
+          aria-label={lang === 'es' ? 'Testimonio anterior' : 'Previous testimonial'}
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <button
+          id="next-btn"
+          type="button"
+          class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 w-12 h-12 rounded-full bg-primary/10 border border-primary/20 text-primary flex items-center justify-center hover:bg-primary hover:text-surface transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-surface pointer-events-auto"
+          aria-label={lang === 'es' ? 'Siguiente testimonio' : 'Next testimonial'}
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <div class="flex justify-center gap-2 mt-8" role="tablist" aria-label={lang === 'es' ? 'Navegación de testimonios' : 'Testimonials navigation'}>
+        {testimonials.map((_, i) => (
+          <button
+            type="button"
+            class={`w-2.5 h-2.5 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-surface ${i === 0 ? 'bg-accent w-8' : 'bg-primary/30 hover:bg-primary/50'}`}
+            data-index={i}
+            role="tab"
+            aria-selected={i === 0}
+            aria-label={`${lang === 'es' ? 'Ir al testimonio' : 'Go to testimonial'} ${i + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  </div>
+</Section>
+
+<script>
+  const carousel = document.getElementById('testimonials-carousel');
+  const track = document.getElementById('testimonials-track');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const dots = carousel.querySelectorAll('[data-index]');
+  
+  let currentIndex = 0;
+  const totalSlides = dots.length;
+  let autoplayInterval = null;
+  const autoplayDelay = parseInt(carousel.dataset.autoplay || '5000', 10);
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function updateCarousel(index) {
+    if (index < 0) index = totalSlides - 1;
+    if (index >= totalSlides) index = 0;
+    
+    currentIndex = index;
+    const translateX = -currentIndex * 100;
+    track.style.transform = `translateX(${translateX}%)`;
+    
+    dots.forEach((dot, i) => {
+      const isActive = i === currentIndex;
+      dot.classList.toggle('bg-accent', isActive);
+      dot.classList.toggle('w-8', isActive);
+      dot.classList.toggle('bg-primary/30', !isActive);
+      dot.setAttribute('aria-selected', isActive);
+    });
+  }
+
+  function nextSlide() {
+    updateCarousel(currentIndex + 1);
+  }
+
+  function prevSlide() {
+    updateCarousel(currentIndex - 1);
+  }
+
+  function startAutoplay() {
+    if (prefersReducedMotion || totalSlides <= 1) return;
+    autoplayInterval = setInterval(nextSlide, autoplayDelay);
+  }
+
+  function stopAutoplay() {
+    if (autoplayInterval) {
+      clearInterval(autoplayInterval);
+      autoplayInterval = null;
+    }
+  }
+
+  nextBtn?.addEventListener('click', () => {
+    nextSlide();
+    stopAutoplay();
+    startAutoplay();
+  });
+
+  prevBtn?.addEventListener('click', () => {
+    prevSlide();
+    stopAutoplay();
+    startAutoplay();
+  });
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const index = parseInt(dot.dataset.index, 10);
+      updateCarousel(index);
+      stopAutoplay();
+      startAutoplay();
+    });
+  });
+
+  carousel.addEventListener('mouseenter', stopAutoplay);
+  carousel.addEventListener('mouseleave', startAutoplay);
+
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  carousel.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    stopAutoplay();
+  }, { passive: true });
+
+  carousel.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+    startAutoplay();
+  }, { passive: true });
+
+  function handleSwipe() {
+    const swipeThreshold = 50;
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > swipeThreshold) {
+      if (diff > 0) nextSlide();
+      else prevSlide();
+    }
+  }
+
+  startAutoplay();
+
+  const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  mediaQuery.addEventListener('change', (e) => {
+    if (e.matches) stopAutoplay();
+    else startAutoplay();
+  });
+</script>

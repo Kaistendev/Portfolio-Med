@@ -1,0 +1,109 @@
+---
+import Section from '../components/Section.astro';
+import Card from '../components/Card.astro';
+import Button from '../components/Button.astro';
+
+interface Props {
+  lang: 'es' | 'en';
+  title: string;
+  viewAllText: string;
+  viewAllHref: string;
+}
+const { lang, title, viewAllText, viewAllHref } = Astro.props;
+const t = (await import('../lib/i18n.ts')).useTranslations(lang);
+
+const services = [
+  {
+    icon: 'stethoscope',
+    title: lang === 'es' ? 'Medicina Interna' : 'Internal Medicine',
+    description: lang === 'es' 
+      ? 'Diagnóstico y tratamiento integral de enfermedades complejas y crónicas en adultos.' 
+      : 'Comprehensive diagnosis and treatment of complex and chronic diseases in adults.',
+    href: '/servicios/medicina-interna'
+  },
+  {
+    icon: 'heart',
+    title: lang === 'es' ? 'Cardiología Preventiva' : 'Preventive Cardiology',
+    description: lang === 'es'
+      ? 'Evaluación de riesgo cardiovascular, control de hipertensión y dislipemias.'
+      : 'Cardiovascular risk assessment, hypertension and dyslipidemia management.',
+    href: '/servicios/cardiologia-preventiva'
+  },
+  {
+    icon: 'checkup',
+    title: lang === 'es' ? 'Chequeos Ejecutivos' : 'Executive Checkups',
+    description: lang === 'es'
+      ? 'Programas personalizados de prevención y detección temprana para profesionales.'
+      : 'Personalized prevention and early detection programs for professionals.',
+    href: '/servicios/chequeos-ejecutivos'
+  },
+  {
+    icon: 'chronic',
+    title: lang === 'es' ? 'Enfermedades Crónicas' : 'Chronic Diseases',
+    description: lang === 'es'
+      ? 'Manejo integral de diabetes, hipertensión, EPOC y enfermedades cardiovasculares.'
+      : 'Comprehensive management of diabetes, hypertension, COPD and cardiovascular diseases.',
+    href: '/servicios/enfermedades-cronicas'
+  },
+  {
+    icon: 'prevention',
+    title: lang === 'es' ? 'Medicina Preventiva' : 'Preventive Medicine',
+    description: lang === 'es'
+      ? 'Vacunación, cribado oncológico, asesoramiento nutricional y hábitos saludables.'
+      : 'Vaccination, cancer screening, nutritional counseling and healthy habits.',
+    href: '/servicios/medicina-preventiva'
+  },
+  {
+    icon: 'consultation',
+    title: lang === 'es' ? 'Consulta de Urgencia' : 'Urgent Consultation',
+    description: lang === 'es'
+      ? 'Atención prioritaria para situaciones agudas que no requieren hospitalización.'
+      : 'Priority care for acute situations not requiring hospitalization.',
+    href: '/servicios/consulta-urgencia'
+  },
+];
+
+const icons: Record<string, string> = {
+  stethoscope: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17V7a4 4 0 018 0v10M3 21h18M9 21a4 4 0 000-8h2a4 4 0 000 8H9z"/></svg>',
+  heart: '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
+  checkup: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>',
+  chronic: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>',
+  prevention: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>',
+  consultation: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>',
+};
+---
+
+<Section id="servicios" class="bg-surface">
+  <div slot="header" class="text-center">
+    <h2 class="font-display text-3xl md:text-4xl font-medium text-surface">{title}</h2>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto px-4">
+    {services.map((service, index) => (
+      <div style={`animation-delay: ${index * 100}ms;`} class="h-full">
+        <Card variant="elevated" class="h-full group transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
+        <div slot="header" class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-surface transition-colors duration-300">
+            {icons[service.icon]}
+          </div>
+          <h3 class="font-display text-xl font-medium text-surface">{service.title}</h3>
+        </div>
+        <p slot="content" class="text-surface/70 leading-relaxed">{service.description}</p>
+        <div slot="footer" class="pt-4">
+          <Button variant="outline" size="sm" href={service.href} class="w-full group">
+            {lang === 'es' ? 'Ver detalles' : 'View details'}
+            <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </Button>
+        </div>
+        </Card>
+      </div>
+    ))}
+  </div>
+
+  <div class="text-center mt-12">
+    <Button variant="outline" size="lg" href={viewAllHref} class="">
+      {viewAllText}
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+    </Button>
+  </div>
+</Section>

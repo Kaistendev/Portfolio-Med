@@ -1,0 +1,109 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import Button from '../../components/Button.astro';
+import PulseRibbon from '../../components/PulseRibbon.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { slug: post.id },
+    props: { post, lang: 'es' as const },
+  }));
+}
+
+const { post, lang } = Astro.props;
+const t = (await import('../../lib/i18n.ts')).useTranslations(lang);
+const { title, date, author, category, image, body, description } = post.data;
+const postUrl = `/blog/${post.id}/`;
+const shareUrl = `https://portfolio-med.netlify.app${postUrl}`;
+const shareTitle = encodeURIComponent(title);
+const shareText = encodeURIComponent(description || title);
+
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const currentIndex = sortedPosts.findIndex(p => p.id === post.id);
+const prevPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
+const nextPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
+---
+
+<BaseLayout 
+  title={title} 
+  lang={lang} 
+  description={description || title}
+  canonicalURL={`/blog/${post.id}/`}
+  schemaType="Article"
+  schemaData={{
+    headline: title,
+    description: description || title,
+    image: image,
+    datePublished: date.toISOString(),
+    dateModified: date.toISOString(),
+    author: author,
+  }}
+>
+  <Section id="blog-post" className="bg-surface" padding="xl">
+    <article class="max-w-4xl mx-auto">
+      <header class="mb-8 text-center">
+        <div class="flex items-center justify-center gap-2 mb-4">
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary border border-primary/20">
+            {category}
+          </span>
+        </div>
+        <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-medium text-surface mb-4">{title}</h1>
+        <div class="flex items-center justify-center gap-6 text-surface/60 text-sm mb-6">
+          <time dateTime={date.toISOString().split('T')[0]}>
+            {date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </time>
+          <span>{author}</span>
+        </div>
+        {image && (
+          <img src={image} alt="" class="w-full max-h-96 object-cover rounded-2xl mb-8" loading="lazy" />
+        )}
+      </header>
+
+      <div class="prose prose-primary max-w-none">
+        <div set:html={body} />
+      </div>
+
+      <footer class="mt-12 pt-8 border-t border-primary/10">
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+          <span class="text-sm text-surface/60 font-mono uppercase">{t['blog.readMore']}</span>
+          <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://portfolio-med.netlify.app/blog/${post.id}/`)}&text=${encodeURIComponent(title)}`} target="_blank" rel="noopener noreferrer" class="text-surface/60 hover:text-accent transition-colors" aria-label="Twitter">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+          </a>
+          <a href={`https://www.linkedin.com/sharing/share-offsite/?url=https://portfolio-med.netlify.app/blog/${post.id}/`} target="_blank" rel="noopener noreferrer" class="text-surface/60 hover:text-accent transition-colors" aria-label="LinkedIn">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+          <a href={`mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(description || title)}%20https://portfolio-med.netlify.app/blog/${post.id}/`} class="text-surface/60 hover:text-accent transition-colors" aria-label="Email">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          </a>
+        </div>
+
+        <nav class="grid sm:grid-cols-2 gap-4" aria-label={t['blog.readMore']}>
+          {prevPost && (
+            <a href={`/blog/${prevPost.id}/`} class="flex items-center gap-3 p-4 bg-primary/5 border border-primary/10 rounded-xl hover:bg-primary/10 transition-colors">
+              <svg class="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+              <div>
+                <p class="text-xs text-surface/60 font-mono uppercase">{t['blog.readMore']}</p>
+                <p class="font-medium text-surface line-clamp-1">{prevPost.data.title}</p>
+              </div>
+            </a>
+          )}
+          {nextPost && (
+            <a href={`/blog/${nextPost.id}/`} class="flex items-center gap-3 p-4 bg-primary/5 border border-primary/10 rounded-xl hover:bg-primary/10 transition-colors sm:justify-end sm:ml-auto">
+              <div class="text-right">
+                <p class="text-xs text-surface/60 font-mono uppercase">{t['blog.readMore']}</p>
+                <p class="font-medium text-surface line-clamp-1">{nextPost.data.title}</p>
+              </div>
+              <svg class="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
+          )}
+        </nav>
+      </footer>
+    </article>
+  </Section>
+
+  <PulseRibbon />
+</BaseLayout>

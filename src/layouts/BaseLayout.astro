@@ -4,12 +4,18 @@ interface Props {
   description?: string;
   lang: 'es' | 'en';
   canonicalURL?: string;
+  schemaType?: 'MedicalBusiness' | 'Article' | 'FAQPage' | 'Service';
+  schemaData?: Record<string, any>;
 }
-const { title, description = 'Portfolio médico profesional - Servicios, trayectoria y blog médico', lang, canonicalURL } = Astro.props;
+const { title, description = 'Portfolio médico profesional - Servicios, trayectoria y blog médico', lang, canonicalURL, schemaType = 'MedicalBusiness', schemaData = {} } = Astro.props;
 const t = (await import('../lib/i18n.ts')).useTranslations(lang);
 const siteURL = import.meta.env.SITE || 'https://portfolio-med.example.com';
 const url = canonicalURL ? `${siteURL}${canonicalURL}` : siteURL;
 const ogLocale = lang === 'es' ? 'es_ES' : 'en_US';
+const otherLang = lang === 'es' ? 'en' : 'es';
+const otherLangURL = canonicalURL 
+  ? `${siteURL}/${otherLang}${canonicalURL.replace(/^\/([^\/]+)/, '')}`
+  : `${siteURL}/${otherLang}/`;
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import WhatsAppButton from '../components/WhatsAppButton.astro';
@@ -26,35 +32,88 @@ import WhatsAppButton from '../components/WhatsAppButton.astro';
     <link rel="alternate" hreflang="es" href={`${siteURL}/`} />
     <link rel="alternate" hreflang="en" href={`${siteURL}/en/`} />
     <link rel="alternate" hreflang="x-default" href={`${siteURL}/`} />
+    {canonicalURL && (
+      <>
+        <link rel="alternate" hreflang="es" href={lang === 'es' ? url : otherLangURL} />
+        <link rel="alternate" hreflang="en" href={lang === 'en' ? url : otherLangURL} />
+        <link rel="alternate" hreflang="x-default" href={url} />
+      </>
+    )}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={schemaType === 'Article' ? 'article' : 'website'} />
     <meta property="og:url" content={url} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:locale" content={ogLocale} />
+    {schemaData.image && <meta property="og:image" content={schemaData.image} />}
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    {schemaData.image && <meta name="twitter:image" content={schemaData.image} />}
 
     <script type="application/ld+json" set:html={JSON.stringify({
       '@context': 'https://schema.org',
-      '@type': 'MedicalBusiness',
-      name: 'Dr. Juan Pérez - Medicina Interna',
-      url: siteURL,
-      logo: `${siteURL}/logo.png`,
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: 'Calle Médica 123',
-        addressLocality: 'Ciudad',
-        addressRegion: 'Estado',
-        postalCode: '12345',
-        addressCountry: 'ES'
-      },
-      telephone: '+34-900-123-456',
-      email: 'contacto@portfolio-med.example.com',
-      medicalSpecialty: 'Internal Medicine',
-      priceRange: '€€'
+      '@type': schemaType,
+      ...(schemaType === 'Article' ? {
+        headline: schemaData.headline || title,
+        description: schemaData.description || description,
+        image: schemaData.image,
+        datePublished: schemaData.datePublished,
+        dateModified: schemaData.dateModified,
+        author: {
+          '@type': 'Person',
+          name: schemaData.author || 'Dr. Juan Pérez',
+        },
+        publisher: {
+          '@type': 'Person',
+          name: 'Dr. Juan Pérez',
+        },
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': url,
+        },
+      } : schemaType === 'MedicalBusiness' ? {
+        '@context': 'https://schema.org',
+        '@type': 'MedicalBusiness',
+        name: 'Dr. Juan Pérez - Medicina Interna',
+        url: siteURL,
+        logo: `${siteURL}/logo.png`,
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: 'Calle Médica 123',
+          addressLocality: 'Ciudad',
+          addressRegion: 'Estado',
+          postalCode: '12345',
+          addressCountry: 'ES'
+        },
+        telephone: '+34-900-123-456',
+        email: 'contacto@portfolio-med.example.com',
+        medicalSpecialty: 'Internal Medicine',
+        priceRange: '€€'
+      } : schemaType === 'Service' ? {
+        '@context': 'https://schema.org',
+        '@type': 'MedicalBusiness',
+        name: schemaData.name || title,
+        description: schemaData.description,
+        url: url,
+        medicalSpecialty: schemaData.medicalSpecialty,
+        areaServed: {
+          '@type': 'City',
+          name: 'Madrid'
+        },
+        availableChannel: {
+          '@type': 'ServiceChannel',
+          serviceUrl: url,
+          servicePhone: '+34-900-123-456',
+          availableLanguage: ['Spanish', 'English']
+        }
+      } : schemaType === 'FAQPage' ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: schemaData.mainEntity || []
+      } : {})
     })} />
   </head>
   <body class="font-body antialiased text-text bg-bg">

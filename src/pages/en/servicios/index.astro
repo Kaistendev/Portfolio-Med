@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ServicesGrid from '../../../components/ServicesGrid.astro';
+import PulseRibbon from '../../../components/PulseRibbon.astro';
+
+const t = (await import('../../../lib/i18n.ts')).useTranslations('en');
+---
+
+<BaseLayout title={t['services.title']} lang="en" description="Internal medicine, preventive cardiology, executive checkups and chronic disease management services.">
+  <ServicesGrid 
+    lang="en"
+    title={t['services.title']}
+    viewAllText={t['services.viewAll']}
+    viewAllHref="/en/servicios"
+  />
+  
+  <PulseRibbon />
+</BaseLayout>

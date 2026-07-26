@@ -1,0 +1,181 @@
+---
+interface Props {
+  lang: 'es' | 'en';
+}
+const { lang } = Astro.props;
+const t = (await import('../lib/i18n.ts')).useTranslations(lang);
+---
+
+<!-- Inlined Section component to avoid Astro bundling bug -->
+<section id="inicio" class="w-full py-20 lg:py-32 relative min-h-[calc(100vh-4rem)] flex items-center" data-astro-cid>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div class="text-center lg:text-left animate-fade-in-up" style="--delay: 0ms">
+        <span class="inline-flex items-center justify-center px-2.5 py-1 text-sm gap-1.5 font-medium rounded-full bg-accent/10 text-accent border border-accent/20 mb-6 inline-block animate-fade-in-up" style="--delay: 100ms">
+          {t['hero.specialty']}
+        </span>
+        <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-medium leading-tight text-surface mb-6 animate-fade-in-up" style="--delay: 200ms">
+          {t['hero.title']}
+        </h1>
+        <p class="text-lg sm:text-xl text-surface/70 mb-8 max-w-xl mx-auto lg:mx-0 animate-fade-in-up" style="--delay: 300ms">
+          {t['hero.license']}
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in-up" style="--delay: 400ms">
+          <a
+            href="#contacto"
+            class="inline-flex items-center justify-center px-7 py-3 text-lg font-medium text-primary bg-accent hover:bg-accent/90 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-primary shadow-sm shadow-accent/20"
+          >
+            {t['hero.cta']}
+          </a>
+          <a
+            href="/servicios"
+            class="inline-flex items-center justify-center px-7 py-3 text-lg font-medium text-primary border-2 border-primary bg-transparent hover:bg-primary/10 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-primary"
+          >
+            {t['nav.servicios']}
+          </a>
+        </div>
+      </div>
+
+      <div class="relative hidden lg:block animate-fade-in-right" style="--delay: 500ms">
+        <div class="relative aspect-square max-w-md mx-auto">
+          <div class="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 rounded-3xl blur-2xl" />
+          <div class="relative z-10 aspect-square rounded-3xl bg-gradient-to-br from-primary/5 to-accent/5 border border-primary/10 flex items-center justify-center">
+            <svg class="w-3/4 h-3/4 text-primary/30" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <div class="absolute -top-4 -right-4 w-24 h-24 border-2 border-accent/30 rounded-full animate-ping" aria-hidden="true" />
+          <div class="absolute -bottom-4 -left-4 w-32 h-32 border-2 border-primary/20 rounded-full animate-ping" style="animation-delay: 1s" aria-hidden="true" />
+        </div>
+        <div class="grid grid-cols-2 gap-4 mt-8 text-center">
+          <div class="bg-surface/50 backdrop-blur-sm rounded-xl p-4 border border-primary/10">
+            <p class="font-display text-2xl font-medium text-primary">15+</p>
+            <p class="text-sm text-surface/60">{lang === 'es' ? 'Años de experiencia' : 'Years of experience'}</p>
+          </div>
+          <div class="bg-surface/50 backdrop-blur-sm rounded-xl p-4 border border-primary/10">
+            <p class="font-display text-2xl font-medium text-primary">5000+</p>
+            <p class="text-sm text-surface/60">{lang === 'es' ? 'Pacientes atendidos' : 'Patients treated'}</p>
+          </div>
+          <div class="bg-surface/50 backdrop-blur-sm rounded-xl p-4 border border-primary/10">
+            <p class="font-display text-2xl font-medium text-primary">98%</p>
+            <p class="text-sm text-surface/60">{lang === 'es' ? 'Satisfacción' : 'Satisfaction rate'}</p>
+          </div>
+          <div class="bg-surface/50 backdrop-blur-sm rounded-xl p-4 border border-primary/10">
+            <p class="font-display text-2xl font-medium text-accent">24/7</p>
+            <p class="text-sm text-surface/60">{lang === 'es' ? 'Disponibilidad urgencias' : 'Emergency availability'}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inlined PulseRibbon to avoid Astro bundling bug -->
+  <div class="w-full overflow-hidden mt-16" style="height: 3px" role="img" aria-label="Línea decorativa de latido cardíaco">
+    <svg 
+      viewBox="0 0 1000 100" 
+      preserveAspectRatio="none" 
+      class="w-full h-full"
+      style="display: block"
+    >
+      <defs>
+        <linearGradient id="pulse-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#0D7377" stop-opacity="0.3" />
+          <stop offset="50%" stop-color="#0D7377" stop-opacity="1" />
+          <stop offset="100%" stop-color="#0D7377" stop-opacity="0.3" />
+        </linearGradient>
+      </defs>
+      
+      <path
+        id="pulse-path"
+        d="M0,50 
+           C100,50 150,50 200,50
+           C220,50 230,30 240,30
+           C250,30 260,70 270,70
+           C280,70 290,30 300,30
+           C310,30 320,50 340,50
+           C440,50 540,50 640,50
+           C660,50 670,30 680,30
+           C690,30 700,70 710,70
+           C720,70 730,30 740,30
+           C750,30 760,50 780,50
+           C880,50 980,50 1000,50"
+        stroke="url(#pulse-gradient)"
+        stroke-width="3"
+        stroke-linecap="round"
+        fill="none"
+        style={{
+          strokeDasharray: 1000,
+          strokeDashoffset: 0,
+        }}
+      />
+      
+      <animate
+        attributeName="strokeDashoffset"
+        from="0"
+        to="-1000"
+        dur="3s"
+        repeatCount="indefinite"
+      />
+    </svg>
+
+    <style>
+      @media (prefers-reduced-motion: reduce) {
+        #pulse-path {
+          animation: none !important;
+          stroke-dashoffset: 0 !important;
+        }
+      }
+    </style>
+  </div>
+</section>
+
+<style>
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes fade-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @keyframes ping {
+    75%, 100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out forwards;
+    opacity: 0;
+    animation-delay: var(--delay, 0ms);
+  }
+  .animate-fade-in-right {
+    animation: fade-in-right 0.8s ease-out forwards;
+    opacity: 0;
+    animation-delay: var(--delay, 0ms);
+  }
+  .animate-ping {
+    animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-fade-in-up,
+    .animate-fade-in-right,
+    .animate-ping {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+</style>

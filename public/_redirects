@@ -1,0 +1,17 @@
+# Language redirects
+/en/*  /en/:splat  200
+/es/*  /:splat  200
+
+# Service pages redirects (if needed)
+/servicios/*  /servicios/:splat  200
+/en/servicios/*  /en/servicios/:splat  200
+
+# Blog pages redirects
+/blog/*  /blog/:splat  200
+/en/blog/*  /en/blog/:splat  200
+
+# Admin redirects
+/admin/*  /admin/:splat  200
+
+# Health check
+/health  /health  200

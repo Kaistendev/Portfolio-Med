@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BlogGrid from '../../../components/BlogGrid.astro';
+import PulseRibbon from '../../../components/PulseRibbon.astro';
+
+const t = (await import('../../../lib/i18n.ts')).useTranslations('en');
+---
+
+<BaseLayout title={t['blog.title']} lang="en" description="Medical articles and publications on internal medicine, prevention and chronic diseases.">
+  <BlogGrid lang="en" />
+
+  <PulseRibbon />
+</BaseLayout>

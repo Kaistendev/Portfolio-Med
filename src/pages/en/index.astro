@@ -1,11 +1,41 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import HeroSection from '../../components/HeroSection.astro';
+import ServicesGrid from '../../components/ServicesGrid.astro';
+import Timeline from '../../components/Timeline.astro';
+import BlogGrid from '../../components/BlogGrid.astro';
+import TestimonialsCarousel from '../../components/TestimonialsCarousel.astro';
+import ContactSection from '../../components/ContactSection.astro';
+import PulseRibbon from '../../components/PulseRibbon.astro';
+
 const t = (await import('../../lib/i18n.ts')).useTranslations('en');
 ---
-<BaseLayout title={t['hero.title']} lang="en">
-  <main>
-    <h1>{t['hero.title']}</h1>
-    <p>{t['hero.specialty']}</p>
-    <p>{t['hero.license']}</p>
-  </main>
+
+<BaseLayout title={t['hero.title']} lang="en" description="Professional medical portfolio - Internal medicine services, career trajectory and medical blog.">
+  <HeroSection lang="en" />
+  
+  <PulseRibbon />
+
+  <ServicesGrid 
+    lang="en"
+    title={t['services.title']}
+    viewAllText={t['services.viewAll']}
+    viewAllHref="/en/servicios"
+  />
+
+  <PulseRibbon />
+
+  <Timeline lang="en" title={t['timeline.title']} />
+
+  <PulseRibbon />
+
+  <BlogGrid lang="en" />
+
+  <PulseRibbon />
+
+  <TestimonialsCarousel lang="en" />
+
+  <PulseRibbon />
+
+  <ContactSection lang="en" />
 </BaseLayout>

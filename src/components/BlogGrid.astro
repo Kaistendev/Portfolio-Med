@@ -1,0 +1,205 @@
+---
+import { getCollection } from 'astro:content';
+import Section from './Section.astro';
+
+interface Props {
+  lang: 'es' | 'en';
+  title: string;
+  viewAllText: string;
+  viewAllHref: string;
+}
+const { lang, title, viewAllText, viewAllHref } = Astro.props;
+const t = (await import('../lib/i18n.ts')).useTranslations(lang);
+
+const categories = lang === 'es'
+  ? ['Todas', 'Medicina Interna', 'Prevención', 'Enfermedades Crónicas', 'Investigación', 'Consejos de Salud']
+  : ['All', 'Internal Medicine', 'Prevention', 'Chronic Diseases', 'Research', 'Health Tips'];
+
+const categoryMap: Record<string, string> = {
+  'Todas': '',
+  'All': '',
+  'Medicina Interna': 'Medicina Interna',
+  'Internal Medicine': 'Internal Medicine',
+  'Prevención': 'Prevención',
+  'Prevention': 'Prevention',
+  'Enfermedades Crónicas': 'Enfermedades Crónicas',
+  'Chronic Diseases': 'Chronic Diseases',
+  'Investigación': 'Investigación',
+  'Research': 'Research',
+  'Consejos de Salud': 'Consejos de Salud',
+  'Health Tips': 'Health Tips',
+};
+
+const blogPosts = await getCollection(lang === 'es' ? 'blog' : 'blog_en');
+---
+
+<Section id="blog" className="bg-surface">
+  <div slot="header" class="text-center">
+    <h2 class="font-display text-3xl md:text-4xl font-medium text-surface">{title}</h2>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8" role="search" aria-label={lang === 'es' ? 'Filtrar artículos' : 'Filter articles'}>
+      <div class="relative w-full sm:w-64">
+        <input
+          type="search"
+          id="blog-search"
+          placeholder={lang === 'es' ? 'Buscar por título...' : 'Search by title...'}
+          class="w-full px-4 py-2.5 text-surface bg-bg border border-primary/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
+          aria-label={lang === 'es' ? 'Buscar artículos' : 'Search articles'}
+        />
+      </div>
+      <div class="flex flex-wrap gap-2 justify-center">
+        {categories.map((cat, i) => (
+          <button
+            type="button"
+            class={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-surface ${i === 0
+              ? 'bg-accent text-primary shadow-sm shadow-accent/20'
+              : 'bg-primary/10 text-primary hover:bg-primary/20'
+            }`}
+            data-category={categoryMap[cat]}
+            aria-pressed={i === 0}
+            role="tab"
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8" role="list" aria-label={lang === 'es' ? 'Artículos del blog' : 'Blog articles'}>
+      {blogPosts.map((post, index) => (
+        <article class="group bg-surface rounded-2xl border border-primary/10 hover:border-primary/30 overflow-hidden transition-all duration-300 h-full flex flex-col" style={{ animationDelay: `${index * 100}ms` }} role="listitem">
+          <div class="relative aspect-video overflow-hidden bg-primary/5">
+            {post.data.image ? (
+              <img
+                src={post.data.image}
+                alt=""
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+              />
+            ) : (
+              <svg class="w-full h-full text-primary/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            )}
+            <div class="absolute top-3 left-3">
+              <span class={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${post.data.category === 'Medicina Interna' || post.data.category === 'Internal Medicine' ? 'bg-primary/20 text-primary' : post.data.category === 'Prevención' || post.data.category === 'Prevention' ? 'bg-green-100 text-green-800' : post.data.category === 'Enfermedades Crónicas' || post.data.category === 'Chronic Diseases' ? 'bg-amber-100 text-amber-800' : 'bg-accent/20 text-accent'}`}>
+                {post.data.category}
+              </span>
+            </div>
+          </div>
+          <div class="p-6 flex flex-col flex-1">
+            <time class="text-sm text-surface/50 mb-2" dateTime={post.data.date.toISOString().split('T')[0]}>
+              {post.data.date.toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </time>
+            <h3 class="font-display text-xl font-medium text-surface mb-3 group-hover:text-accent transition-colors line-clamp-2">
+              <a href={post.url} class="block">{post.data.title}</a>
+            </h3>
+            <p class="text-surface/70 text-base leading-relaxed mb-4 flex-1 line-clamp-3">
+              {post.data.description || post.data.body?.substring(0, 160) + '...'}
+            </p>
+            <a
+              href={post.url}
+              class="inline-flex items-center gap-2 text-primary font-medium hover:text-accent transition-colors"
+              aria-label={lang === 'es' ? `Leer más: ${post.data.title}` : `Read more: ${post.data.title}`}
+            >
+              {t['blog.readMore']}
+              <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div id="no-results" class="hidden text-center py-12">
+      <svg class="w-16 h-16 mx-auto text-primary/30 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      <p class="text-surface/60 text-lg">{lang === 'es' ? 'No se encontraron artículos' : 'No articles found'}</p>
+      <p class="text-surface/50 text-sm mt-1">{lang === 'es' ? 'Intenta con otra búsqueda o filtro' : 'Try a different search or filter'}</p>
+    </div>
+
+    <div class="text-center mt-12">
+      <a
+        href={viewAllHref}
+        class="inline-flex items-center gap-2 px-7 py-3 text-lg font-medium text-primary border-2 border-primary/20 rounded-lg hover:bg-primary/10 hover:border-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-surface"
+      >
+        {viewAllText}
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+    </div>
+  </div>
+</Section>
+
+<script>
+  const grid = document.getElementById('blog-grid');
+  const noResults = document.getElementById('no-results');
+  const searchInput = document.getElementById('blog-search');
+  const categoryButtons = document.querySelectorAll('[data-category]');
+  const articles = Array.from(grid.querySelectorAll('[role="listitem"]'));
+
+  let activeCategory = '';
+
+  function filterArticles() {
+    const searchTerm = searchInput.value.toLowerCase().trim();
+    let visibleCount = 0;
+
+    articles.forEach(article => {
+      const title = article.querySelector('h3')?.textContent?.toLowerCase() || '';
+      const excerpt = article.querySelector('p:nth-of-type(2)')?.textContent?.toLowerCase() || '';
+      const category = article.querySelector('[class*="rounded-full"]')?.textContent?.trim() || '';
+      
+      const matchesSearch = !searchTerm || title.includes(searchTerm) || excerpt.includes(searchTerm);
+      const matchesCategory = !activeCategory || category === activeCategory;
+
+      if (matchesSearch && matchesCategory) {
+        article.classList.remove('hidden');
+        visibleCount++;
+      } else {
+        article.classList.add('hidden');
+      }
+    });
+
+    if (visibleCount === 0) {
+      grid.classList.add('hidden');
+      noResults.classList.remove('hidden');
+    } else {
+      grid.classList.remove('hidden');
+      noResults.classList.add('hidden');
+    }
+  }
+
+  searchInput.addEventListener('input', debounce(filterArticles, 300));
+
+  categoryButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      categoryButtons.forEach(b => {
+        b.classList.remove('bg-accent', 'text-primary', 'shadow-sm', 'shadow-accent/20');
+        b.classList.add('bg-primary/10', 'text-primary', 'hover:bg-primary/20');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      btn.classList.add('bg-accent', 'text-primary', 'shadow-sm', 'shadow-accent/20');
+      btn.classList.remove('bg-primary/10', 'hover:bg-primary/20');
+      btn.setAttribute('aria-pressed', 'true');
+      activeCategory = btn.dataset.category || '';
+      filterArticles();
+    });
+  });
+
+  function debounce(fn, delay) {
+    let timeoutId;
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => fn.apply(this, args), delay);
+    };
+  }
+</script>
+
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    article {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+  .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+</style>
