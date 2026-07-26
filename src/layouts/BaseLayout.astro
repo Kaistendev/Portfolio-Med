@@ -10,6 +10,9 @@ const t = (await import('../lib/i18n.ts')).useTranslations(lang);
 const siteURL = import.meta.env.SITE || 'https://portfolio-med.example.com';
 const url = canonicalURL ? `${siteURL}${canonicalURL}` : siteURL;
 const ogLocale = lang === 'es' ? 'es_ES' : 'en_US';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
 ---
 <!doctype html>
 <html lang={lang}>
@@ -55,7 +58,12 @@ const ogLocale = lang === 'es' ? 'es_ES' : 'en_US';
     })} />
   </head>
   <body class="font-body antialiased text-text bg-bg">
-    <slot />
+    <Navbar lang={lang} />
+    <main id="main-content" class="pt-16">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    <WhatsAppButton lang={lang} />
     <script is:inline>
       document.documentElement.lang = '{lang}';
     </script>

@@ -1,0 +1,46 @@
+---
+interface Props {
+  variant?: 'primary' | 'secondary' | 'outline';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
+  class?: string;
+  children?: import('astro').AstroSlotted;
+}
+const { 
+  variant = 'primary', 
+  size = 'md', 
+  href, 
+  type = 'button', 
+  disabled = false, 
+  class: className = '' 
+} = Astro.props;
+const hasChildren = Astro.slots.has('default');
+
+const baseStyles = 'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+
+const variantStyles = {
+  primary: 'bg-accent text-primary hover:bg-accent/90 focus:ring-accent shadow-sm shadow-accent/20',
+  secondary: 'bg-primary text-surface hover:bg-primary/90 focus:ring-primary shadow-sm shadow-primary/20',
+  outline: 'border-2 border-primary text-primary bg-transparent hover:bg-primary/10 focus:ring-primary',
+};
+
+const sizeStyles = {
+  sm: 'px-3 py-1.5 text-sm gap-1.5',
+  md: 'px-5 py-2.5 text-base gap-2',
+  lg: 'px-7 py-3 text-lg gap-2.5',
+};
+
+const classes = [baseStyles, variantStyles[variant], sizeStyles[size], className].filter(Boolean).join(' ');
+
+const isLink = !!href;
+const Tag = isLink ? 'a' : 'button';
+const props = isLink 
+  ? { href, class: classes, 'aria-disabled': disabled }
+  : { type, class: classes, disabled };
+---
+
+<{Tag} {...props} {...(disabled && isLink ? { tabindex: -1, 'aria-disabled': 'true' } : {})}>
+  <slot />
+</{Tag}>

@@ -1,0 +1,85 @@
+---
+interface Props {
+  lang: 'es' | 'en';
+}
+const { lang } = Astro.props;
+const t = (await import('../lib/i18n.ts')).useTranslations(lang);
+import LanguageSwitcher from './LanguageSwitcher.astro';
+---
+<header class="fixed top-0 left-0 right-0 z-50 bg-primary/95 backdrop-blur-sm border-b border-primary/20">
+  <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Navegación principal">
+    <div class="flex h-16 items-center justify-between">
+      <div class="flex items-center gap-2">
+        <svg class="h-8 w-8 text-accent" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+        </svg>
+        <span class="font-display text-xl font-medium text-surface">Dr. Juan Pérez</span>
+      </div>
+
+      <div class="hidden md:flex md:items-center md:gap-8">
+        <a href="/" class="text-sm font-medium text-surface/90 hover:text-accent transition-colors">{t['nav.inicio']}</a>
+        <a href="/servicios" class="text-sm font-medium text-surface/90 hover:text-accent transition-colors">{t['nav.servicios']}</a>
+        <a href="/blog" class="text-sm font-medium text-surface/90 hover:text-accent transition-colors">{t['nav.blog']}</a>
+        <a href="/contacto" class="text-sm font-medium text-surface/90 hover:text-accent transition-colors">{t['nav.contacto']}</a>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <LanguageSwitcher lang={lang} class="group" />
+
+        <a
+          href="#contacto"
+          class="hidden sm:inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-primary bg-accent hover:bg-accent/90 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-primary"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v3m0 0v3m0-3h3m-3 0H9"/>
+          </svg>
+          {t['hero.cta']}
+        </a>
+
+        <button
+          type="button"
+          class="md:hidden p-2 text-surface/90 hover:text-accent transition-colors focus:outline-none focus:ring-2 focus:ring-accent rounded-md"
+          aria-label="Abrir menú"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="md:hidden hidden" id="mobile-menu" aria-label="Menú móvil">
+      <div class="px-2 pt-2 pb-3 space-y-1 border-t border-primary/20">
+        <a href="/" class="block px-3 py-2 text-base font-medium text-surface/90 hover:text-accent hover:bg-primary/10 rounded-lg">{t['nav.inicio']}</a>
+        <a href="/servicios" class="block px-3 py-2 text-base font-medium text-surface/90 hover:text-accent hover:bg-primary/10 rounded-lg">{t['nav.servicios']}</a>
+        <a href="/blog" class="block px-3 py-2 text-base font-medium text-surface/90 hover:text-accent hover:bg-primary/10 rounded-lg">{t['nav.blog']}</a>
+        <a href="/contacto" class="block px-3 py-2 text-base font-medium text-surface/90 hover:text-accent hover:bg-primary/10 rounded-lg">{t['nav.contacto']}</a>
+        <div class="pt-2 flex items-center gap-4">
+          <LanguageSwitcher lang={lang} />
+          <a href="#contacto" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-primary bg-accent hover:bg-accent/90 rounded-lg">{t['hero.cta']}</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const menuBtn = document.querySelector('[aria-controls="mobile-menu"]');
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener('click', () => {
+      const isExpanded = menuBtn.getAttribute('aria-expanded') === 'true';
+      menuBtn.setAttribute('aria-expanded', String(!isExpanded));
+      mobileMenu.classList.toggle('hidden');
+    });
+  }
+</script>
+
+<style>
+  header {
+    background-color: rgba(13, 115, 119, 0.95);
+  }
+</style>

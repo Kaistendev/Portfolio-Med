@@ -1,0 +1,137 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: public/uploads
+public_folder: /uploads
+
+site_url: https://portfolio-med.example.com
+display_url: https://portfolio-med.example.com
+
+logo_url: /logo.png
+
+i18n:
+  structure: multiple_folders
+  locales: [es, en]
+  default_locale: es
+
+local_backend: true
+
+collections:
+  - name: "blog"
+    label: "Blog"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Título", name: "title", widget: "string"}
+      - {label: "Fecha", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "DD/MM/YYYY", time_format: false}
+      - {label: "Autor", name: "author", widget: "string", default: "Dr. Juan Pérez"}
+      - {label: "Categoría", name: "category", widget: "select", options: ["Medicina Interna", "Prevención", "Enfermedades Crónicas", "Investigación", "Consejos de Salud"]}
+      - {label: "Imagen destacada", name: "image", widget: "image", required: false}
+      - {label: "Cuerpo", name: "body", widget: "markdown"}
+    meta:
+      - {label: "Idioma", name: "locale", widget: "hidden", default: "es"}
+
+  - name: "blog_en"
+    label: "Blog (English)"
+    folder: "src/content/blog/en"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "MM/DD/YYYY", time_format: false}
+      - {label: "Author", name: "author", widget: "string", default: "Dr. Juan Pérez"}
+      - {label: "Category", name: "category", widget: "select", options: ["Internal Medicine", "Prevention", "Chronic Diseases", "Research", "Health Tips"]}
+      - {label: "Featured Image", name: "image", widget: "image", required: false}
+      - {label: "Body", name: "body", widget: "markdown"}
+    meta:
+      - {label: "Locale", name: "locale", widget: "hidden", default: "en"}
+
+  - name: "servicios"
+    label: "Servicios"
+    folder: "src/content/servicios"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Título", name: "title", widget: "string"}
+      - {label: "Icono", name: "icon", widget: "select", options: ["stethoscope", "heart", "checkup", "chronic", "prevention", "consultation"]}
+      - {label: "Descripción corta", name: "description", widget: "text"}
+      - {label: "Cuerpo completo", name: "body", widget: "markdown"}
+    meta:
+      - {label: "Idioma", name: "locale", widget: "hidden", default: "es"}
+
+  - name: "servicios_en"
+    label: "Services"
+    folder: "src/content/servicios/en"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Icon", name: "icon", widget: "select", options: ["stethoscope", "heart", "checkup", "chronic", "prevention", "consultation"]}
+      - {label: "Short Description", name: "description", widget: "text"}
+      - {label: "Full Body", name: "body", widget: "markdown"}
+    meta:
+      - {label: "Locale", name: "locale", widget: "hidden", default: "en"}
+
+  - name: "testimonios"
+    label: "Testimonios"
+    folder: "src/content/testimonios"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Nombre", name: "name", widget: "string"}
+      - {label: "Rating (1-5)", name: "rating", widget: "number", min: 1, max: 5, step: 1, default: 5}
+      - {label: "Texto", name: "text", widget: "markdown"}
+      - {label: "Fecha", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "DD/MM/YYYY", time_format: false}
+    meta:
+      - {label: "Idioma", name: "locale", widget: "hidden", default: "es"}
+
+  - name: "testimonios_en"
+    label: "Testimonials"
+    folder: "src/content/testimonios/en"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Name", name: "name", widget: "string"}
+      - {label: "Rating (1-5)", name: "rating", widget: "number", min: 1, max: 5, step: 1, default: 5}
+      - {label: "Text", name: "text", widget: "markdown"}
+      - {label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "MM/DD/YYYY", time_format: false}
+    meta:
+      - {label: "Locale", name: "locale", widget: "hidden", default: "en"}
+
+  - name: "perfil"
+    label: "Perfil del Médico"
+    folder: "src/content/perfil"
+    create: true
+    slug: "perfil"
+    identifier_field: name
+    fields:
+      - {label: "Nombre", name: "name", widget: "string", default: "Dr. Juan Pérez"}
+      - {label: "Especialidad", name: "specialty", widget: "string", default: "Medicina Interna"}
+      - {label: "Colegiatura", name: "license", widget: "string", default: "Colegiado Nº 12345"}
+      - {label: "Biografía", name: "bio", widget: "markdown"}
+      - {label: "Foto", name: "photo", widget: "image"}
+      - {label: "CV (PDF)", name: "cv", widget: "file", required: false}
+    meta:
+      - {label: "Idioma", name: "locale", widget: "hidden", default: "es"}
+
+  - name: "perfil_en"
+    label: "Doctor Profile"
+    folder: "src/content/perfil/en"
+    create: true
+    slug: "profile"
+    identifier_field: name
+    fields:
+      - {label: "Name", name: "name", widget: "string", default: "Dr. Juan Pérez"}
+      - {label: "Specialty", name: "specialty", widget: "string", default: "Internal Medicine"}
+      - {label: "License", name: "license", widget: "string", default: "License No. 12345"}
+      - {label: "Biography", name: "bio", widget: "markdown"}
+      - {label: "Photo", name: "photo", widget: "image"}
+      - {label: "CV (PDF)", name: "cv", widget: "file", required: false}
+    meta:
+      - {label: "Locale", name: "locale", widget: "hidden", default: "en"}
+
+slug:
+  encoding: "ascii"
+  sanitize_replacement: "-"
